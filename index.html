@@ -6,24 +6,28 @@
     <title>バスレーダー</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Google FontsからPoppinsフォントを読み込む -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         #map-container {
             position: relative;
             display: inline-block;
-            margin-top: 20px; /* 上部に20pxの余白を追加 */
+            margin-top: 10px; /* 上部に20pxの余白を追加 */
         }
         
-        #map {
+        #map { 
             top: 32px; /* 外枠に隣接するように調整 */
             height: 500px;
             width: 500px; /* 地図の幅と高さを同じにすることで円形を確実にします */
             border-radius: 50%; /* 丸い形にする */
             overflow: hidden; /* 地図の境界からはみ出る部分を隠す */
-            border: 30px solid transparent;
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4), /* 地図全体の下に落ちる影 */
-                        inset 0 10px 15px rgba(255, 255, 255, 0.5), /* 内側の光の反射による効果 */
-                        inset 0 -10px 20px rgba(0, 0, 0, 0.3); /* 下側の内側の影で立体感を強調 */
-            position: relative;
+            border: 30px solid transparent; /* 外枠を透明に設定 */
+            box-shadow: 
+                0 20px 30px rgba(0, 0, 0, 0.4), /* 地図全体の下に落ちる影 */
+                inset 0 10px 15px rgba(255, 255, 255, 0.5), /* 内側の光の反射による効果 */
+                inset 0 -10px 20px rgba(0, 0, 0, 0.3), /* 下側の内側の影で立体感を強調 */
+                0 0 0 30px rgba(255, 255, 255, 0.5), /* 外側の白い光 */
+                inset 0 0 0 30px rgba(255, 255, 255, 0.5); /* 内側の光 */
         }
 
         #north-rectangle1 {
@@ -33,9 +37,9 @@
             transform: translateX(-50%);
             width: 50px;
             height: 15px;
-            background-color: #f1ebebc9; /* 外枠と同じ色の四角形 */
+            background-color: #f1ebeb7c; /* 外枠と同じ色の四角形 */
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* 立体感を追加する影 */
-            background: linear-gradient(to bottom right, #f1ebebc9, rgba(0, 0, 0, 0.2)); /* 左上が明るく右下がもっと暗くなるグラデーションを追加 */
+            background: linear-gradient(to bottom right, #f1ebebc9, rgba(0, 0, 0, 0.4)); /* 左上が明るく右下がもっと暗くなるグラデーションを追加 */
         }
 
         #north-rectangle2 {
@@ -45,9 +49,9 @@
             transform: translateX(-50%);
             width: 20px;
             height: 10px;
-            background-color: #f1ebebc9; /* 外枠と同じ色の四角形 */
+            background-color: #f1ebeb7c; /* 外枠と同じ色の四角形 */
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); /* 立体感を追加する影 */
-            background: linear-gradient(to bottom right, #f1ebebc9, rgba(0, 0, 0, 0.2)); /* 左上が明るく右下がもっと暗くなるグラデーションを追加 */
+            background: linear-gradient(to bottom right, #f1ebebc9, rgba(0, 0, 0, 0.4)); /* 左上が明るく右下がもっと暗くなるグラデーションを追加 */
         }        
 
         #north-rectangle3 {
@@ -57,21 +61,23 @@
             transform: translateX(-50%);
             width: 40px;
             height: 10px;
-            background-color: #f1ebebc9; /* 外枠と同じ色の四角形 */
+            background-color: #f1ebeb7c; /* 外枠と同じ色の四角形 */
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); /* 立体感を追加する影 */
-            background: linear-gradient(to bottom right, #f1ebebc9, rgba(0, 0, 0, 0.2)); /* 左上が明るく右下がもっと暗くなるグラデーションを追加 */
+            background: linear-gradient(to bottom right, #f1ebebc9, rgba(0, 0, 0, 0.4)); /* 左上が明るく右下がもっと暗くなるグラデーションを追加 */
         }       
 
-        header {
+        header { 
             background: linear-gradient(135deg, #4CAF50, #45a049); /* 緑色のグラデーション */
             color: white; /* テキストの色を白に */
-            padding: 7px 7px; /* パディングを増やして余裕を持たせる */
+            padding: 8px 8px; /* パディングを増やして余裕を持たせる */
             text-align: left; /* 左揃え */
-            font-weight: bold; /* 太字 */
-            font-size: 24px; /* フォントサイズを大きく */
+            font-weight: 600; /* 太字 */
+            font-size: 18px; /* フォントサイズを少し小さく */
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* ヘッダーに影を追加 */
             border-radius: 8px; /* 角を丸く */
-        }
+            font-family: 'Poppins', sans-serif; /* モダンなフォントを指定 */
+            max-width: 600px; /* 横幅を最大600pxに制限 */
+         }
     
         header img {
             vertical-align: middle;
@@ -129,7 +135,7 @@
         <p>データ反映日時: <span id="timestamp">更新中...</span></p>
         <button id="getCurrentLocationButton">現在位置</button>
         <button id="refreshButton">データを更新</button>
-        <button id="updateEvery20sButton">20秒ごとに9回更新</button>
+        <button id="updateEvery20sButton">20秒ごとに9回更新</button><br />
         <button id="clearDataMarkersButton">マーカーの削除</button>
         <button id="showStationsButton">バス停を表示</button>
         <button id="clearStationMarkersButton">バス停を削除</button>
@@ -241,14 +247,14 @@
         </table>
     </div>
     <!-- 運行情報とルート更新情報を表示するための新しいdiv要素を追加 -->
-    <div>
+    <!-- <div>
         <h3>運行情報</h3>
         <div id="alertInfo"></div>
     </div>
     <div>
         <h3>ルート更新情報</h3>
         <div id="routeUpdateInfo"></div>
-    </div>
+    </div> -->
     <script>
         // 新しい関数を追加
         async function fetchTransitInfo(action) {
