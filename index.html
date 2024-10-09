@@ -10,6 +10,7 @@
         #map-container {
             position: relative;
             display: inline-block;
+            margin-top: 20px; /* 上部に20pxの余白を追加 */
         }
         
         #map {
@@ -62,10 +63,23 @@
         }       
 
         header {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            text-align: left;
-            font-weight: bold;
+            background: linear-gradient(135deg, #4CAF50, #45a049); /* 緑色のグラデーション */
+            color: white; /* テキストの色を白に */
+            padding: 7px 7px; /* パディングを増やして余裕を持たせる */
+            text-align: left; /* 左揃え */
+            font-weight: bold; /* 太字 */
+            font-size: 24px; /* フォントサイズを大きく */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* ヘッダーに影を追加 */
+            border-radius: 8px; /* 角を丸く */
+        }
+    
+        header img {
+            vertical-align: middle;
+            width: 60px; /* 画像サイズを少し大きく */
+            height: 60px;
+            margin-right: 15px;
+            border-radius: 50%; /* 画像も丸く */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 画像にも影を追加 */
         }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
@@ -77,10 +91,31 @@
             border-radius: 5px;
             border: 2px solid gray; /* 濃い灰色に修正 */
         }
+        button {
+            background-color: #4CAF50; /* 緑色の背景 */
+            color: white; /* テキストの色 */
+            border: none; /* ボーダーなし */
+            padding: 12px 24px; /* パディングを追加 */
+            text-align: center; /* テキストを中央揃え */
+            text-decoration: none; /* テキストの下線なし */
+            display: inline-block; /* インラインブロック要素にする */
+            font-size: 16px; /* フォントサイズ */
+            margin: 4px 2px; /* マージン */
+            cursor: pointer; /* カーソルをポインターにする */
+            border-radius: 50px; /* 丸みを帯びたボタン */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* 影を追加 */
+            transition: all 0.3s ease 0s; /* アニメーションの遷移を追加 */
+        }   
+        button:hover {
+            background-color: #45a049; /* ホバー時に色を変更 */
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4); /* ホバー時に影を強調 */
+            transform: translateY(-3px); /* ホバー時に少し上に移動する */
+        }
     </style>
 </head>
 <body>
     <header>
+        <img src="https://kickboxerj0322.github.io/bus-radar/064_アイコン.png" alt="バスレーダーアイコン" style="vertical-align: middle; width: 50px; height: 50px; margin-right: 10px;">
         バスレーダー＜きよバス＞
     </header>
     <div id="map-container">
@@ -98,8 +133,8 @@
         <button id="clearDataMarkersButton">マーカーの削除</button>
         <button id="showStationsButton">バス停を表示</button>
         <button id="clearStationMarkersButton">バス停を削除</button>
-        <button id="transitAlertButton">運行情報</button>
-        <button id="routeUpdateButton">ルート更新情報</button>
+        <!-- <button id="transitAlertButton">運行情報</button> -->
+        <!-- <button id="routeUpdateButton">ルート更新情報</button> -->
     </div>
     <div>
         <input type="text" id="vehicleIdInput" placeholder="Enter Vehicle ID">
@@ -326,8 +361,15 @@
             }
 
             // 現在位置ボタンのイベントリスナーを追加
-            document.getElementById('getCurrentLocationButton').addEventListener('click', getCurrentLocation);
-
+            document.getElementById('getCurrentLocationButton').addEventListener('click', () => {
+                // 位置情報の取得処理
+                getCurrentLocation();
+            
+                // 音声再生の処理
+                const audio = new Audio('https://kickboxerj0322.github.io/bus-radar/071_toy-button-105724.mp3');
+                audio.play();
+            });
+            
         let markers = {};  // データを更新ボタン用のマーカー
         let executionMarkers = {};  // 実行ボタン用のマーカー
         let stationMarkers = [];  // バス停のマーカー
@@ -405,7 +447,7 @@
         function createTrainIcon(label, color) {
             return L.divIcon({
                 className: "custom-div-icon",
-                html: `<div style="background-color:${color};color:white;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;">${label}</div>`,
+                html: `<div style="background-color:${color};color:black;width:20px;height:20px;border-radius:50%;text-align:center;line-height:20px;">${label}</div>`,
                 iconSize: [20, 20],
                 iconAnchor: [10, 10],
             });
@@ -508,17 +550,50 @@
             }
         }
 
+        // 音声を3回連続で再生する関数
+        function playAudioThreeTimes() {
+            const audio = new Audio('https://kickboxerj0322.github.io/bus-radar/072_menu-click-89198.mp3');
+            let playCount = 0;  // 再生回数をカウントする変数
+        
+            function playNext() {
+                if (playCount < 3) {
+                    audio.play();
+                    playCount++;  // 再生回数をカウント
+                }
+            }
+        
+            // 音声が終了したら次を再生
+            audio.onended = playNext;
+        
+            // 最初の再生を開始
+            playNext();
+        }
+
+        // 音声を再生する関数
+        function playSound() {
+            const audio = new Audio('https://kickboxerj0322.github.io/bus-radar/073_start-13691.mp3');
+            audio.play();
+        }
+
         document.getElementById('refreshButton').addEventListener('click', async () => {
             await sendRequest();  // VehicleIDなしでリクエストを送信
             setTimeout(async () => {
                 await updateMap(markers, "dataTable");  // a～zのアルファベットを使用してマーカーを表示
             }, 1000);  // 1秒待機してから地図を更新
+
+            // 音声を3回連続で再生
+            playAudioThreeTimes();
         });
 
         document.getElementById('updateEvery20sButton').addEventListener('click', async () => {
             await sendRequest();
+            // 音声を再生
+            playSound();
+
             setTimeout(async () => {
                 await updateMap(markers, "dataTable", false, 0);
+                // バスの位置が更新されるたびに音声を3回連続で再生
+                playAudioThreeTimes(); 
             }, 1000);  // 最初の更新を1秒後に行う
 
             // 20秒ごとに9回更新
@@ -526,6 +601,8 @@
                 setTimeout(async () => {
                     await sendRequest();
                     await updateMap(markers, "dataTable", false, i);
+                    // バスの位置が更新されるたびに音声を3回連続で再生
+                    playAudioThreeTimes();
                 }, i * 20000);  // 20秒ごとに実行
             }
         });
@@ -536,6 +613,10 @@
                 markers[id].forEach(marker => map.removeLayer(marker));
             }
             markers = {};
+
+            // 音声を再生
+            playSound();
+
         });
 
         document.getElementById('startButton').addEventListener('click', async () => {
@@ -544,7 +625,7 @@
                 alert("Vehicle IDを入力してください");
                 return;
             }
-
+           
             // 既存のデータを更新ボタン用マーカーをすべて削除
             for (let id in markers) {
                 markers[id].forEach(marker => map.removeLayer(marker));
@@ -556,12 +637,16 @@
                 executionMarkers[id].forEach(marker => map.removeLayer(marker));
             }
             executionMarkers = {};
+            // 音声を再生
+            playSound();
 
             // 1回目のデータ更新と取得を即時に行う
             await sendRequest(vehicleId);
 
             setTimeout(async () => {
                 await updateMap(executionMarkers, "executionTable", true, 0);
+                // バスの位置が更新されるたびに音声を3回連続で再生
+                playAudioThreeTimes(); 
             }, 1000);  // 1秒待機して最初のデータ取得
 
             // 2回目以降は20秒ごとに取得
@@ -569,6 +654,8 @@
                 setTimeout(async () => {
                     await sendRequest(vehicleId);
                     await updateMap(executionMarkers, "executionTable", true, i);
+                    // バスの位置が更新されるたびに音声を3回連続で再生
+                    playAudioThreeTimes(); 
                 }, i * 20000);  // 20秒ごとに実行
             }
         });
@@ -579,13 +666,18 @@
                 executionMarkers[id].forEach(marker => map.removeLayer(marker));
             }
             executionMarkers = {};
+
+            // 音声を再生
+            playSound();
+
         });
 
         document.getElementById('showStationsButton').addEventListener('click', () => {
             // 既存のバス停マーカーをすべて削除
             stationMarkers.forEach(marker => map.removeLayer(marker));
             stationMarkers = [];
-
+            // 音声を再生
+            playSound();
             // バス停のマーカーを地図に追加
             stations.forEach(station => {
                 const marker = L.marker([station.lat, station.lng], {
@@ -601,18 +693,30 @@
             // バス停マーカーをすべて削除
             stationMarkers.forEach(marker => map.removeLayer(marker));
             stationMarkers = [];
+
+            // 音声を再生
+            playSound();
+
         });
 
         // 運行情報ボタンのイベントリスナー
         document.getElementById('transitAlertButton').addEventListener('click', async () => {
             const alertData = await fetchTransitInfo('Alerts');
             displayTransitInfo(alertData, 'alertInfo');
+
+            // 音声を再生
+            playSound();
+
         });
 
         // ルート更新情報ボタンのイベントリスナー
         document.getElementById('routeUpdateButton').addEventListener('click', async () => {
             const routeData = await fetchTransitInfo('TripUpdates');
             displayTransitInfo(routeData, 'routeUpdateInfo');
+
+            // 音声を再生
+            playSound();
+
         });
 
     }
