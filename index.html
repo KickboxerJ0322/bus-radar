@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>バスレーダー</title>
+    <title>Bus Radar</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <!-- Google FontsからPoppinsフォントを読み込む -->
@@ -67,16 +67,16 @@
         }       
 
         header { 
-            background: linear-gradient(135deg, #4CAF50, #45a049); /* 緑色のグラデーション */
+            background: linear-gradient(135deg, #003366, #002244); /* 濃い青のグラデーション */
             color: white; /* テキストの色を白に */
-            padding: 8px 8px; /* パディングを増やして余裕を持たせる */
+            padding: 4px 4px; /* パディングを増やして余裕を持たせる */
             text-align: left; /* 左揃え */
             font-weight: 600; /* 太字 */
             font-size: 18px; /* フォントサイズを少し小さく */
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* ヘッダーに影を追加 */
             border-radius: 8px; /* 角を丸く */
             font-family: 'Poppins', sans-serif; /* モダンなフォントを指定 */
-            max-width: 600px; /* 横幅を最大600pxに制限 */
+            max-width: 300px; /* 横幅を最大300pxに制限 */
          }
     
         header img {
@@ -98,14 +98,14 @@
             border: 2px solid gray; /* 濃い灰色に修正 */
         }
         button {
-            background-color: #4CAF50; /* 緑色の背景 */
+            background-color: #003366; /* 濃い青の背景 */
             color: white; /* テキストの色 */
             border: none; /* ボーダーなし */
-            padding: 12px 24px; /* パディングを追加 */
+            padding: 12px 12px; /* パディングを追加 */
             text-align: center; /* テキストを中央揃え */
             text-decoration: none; /* テキストの下線なし */
             display: inline-block; /* インラインブロック要素にする */
-            font-size: 16px; /* フォントサイズ */
+            font-size: 12px; /* フォントサイズ */
             margin: 4px 2px; /* マージン */
             cursor: pointer; /* カーソルをポインターにする */
             border-radius: 50px; /* 丸みを帯びたボタン */
@@ -113,7 +113,7 @@
             transition: all 0.3s ease 0s; /* アニメーションの遷移を追加 */
         }   
         button:hover {
-            background-color: #45a049; /* ホバー時に色を変更 */
+            background-color: #001a33; /* ホバー時にさらに濃い青に変更 */
             box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4); /* ホバー時に影を強調 */
             transform: translateY(-3px); /* ホバー時に少し上に移動する */
         }
@@ -121,8 +121,8 @@
 </head>
 <body>
     <header>
-        <img src="https://kickboxerj0322.github.io/bus-radar/064_アイコン.png" alt="バスレーダーアイコン" style="vertical-align: middle; width: 50px; height: 50px; margin-right: 10px;">
-        バスレーダー＜きよバス＞
+        <img src="https://kickboxerj0322.github.io/bus-radar/066_アイコン.png" alt="バスレーダーアイコン" style="vertical-align: middle; width: 50px; height: 50px; margin-right: 10px;">
+        Bus Radar / きよバス
     </header>
     <div id="map-container">
         <div id="north-rectangle1"></div>
@@ -134,21 +134,21 @@
         <br />
         <p>データ反映日時: <span id="timestamp">更新中...</span></p>
         <button id="getCurrentLocationButton">現在位置</button>
-        <button id="refreshButton">データを更新</button>
-        <button id="updateEvery20sButton">20秒ごとに9回更新</button><br />
-        <button id="clearDataMarkersButton">マーカーの削除</button>
-        <button id="showStationsButton">バス停を表示</button>
-        <button id="clearStationMarkersButton">バス停を削除</button>
+        <button id="refreshButton">バス</button>
+        <button id="updateEvery20sButton">バス20秒×9回</button>
+        <button id="clearDataMarkersButton">バス削除</button>
+        <button id="showStationsButton">バス停</button>
+        <button id="clearStationMarkersButton">バス停削除</button>
         <!-- <button id="transitAlertButton">運行情報</button> -->
         <!-- <button id="routeUpdateButton">ルート更新情報</button> -->
     </div>
     <div>
         <input type="text" id="vehicleIdInput" placeholder="Enter Vehicle ID">
         <button id="startButton">実行</button>
-        <button id="clearExecutionMarkersButton">実行を削除</button>
+        <button id="clearExecutionMarkersButton">実行削除</button>
     </div>
     <div>
-        <h3>データを更新ボタンの結果</h3>
+        <h3>バスボタンの結果</h3>
         <table id="dataTable">
             <thead>
                 <tr>
