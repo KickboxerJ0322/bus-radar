@@ -676,6 +676,8 @@
         }
 
         document.getElementById('refreshButton').addEventListener('click', async () => {
+            // 音声を再生
+            playSound();
             await sendRequest();  // VehicleIDなしでリクエストを送信
             setTimeout(async () => {
                 await updateMap(markers, "dataTable");  // a～zのアルファベットを使用してマーカーを表示
